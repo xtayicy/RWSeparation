@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.2.xsd
+			http://www.springframework.org/schema/aop
+    		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+   			http://www.springframework.org/schema/tx
+        	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+   <!-- 映入配置文件 -->
+   <context:property-placeholder location="classpath:jdbc.properties"/>
+   
+   <!-- 配置数据源 -->
+   <bean id="writeSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	 	<property name="url" value="${master.jdbc.url}"/>
+	 	<property name="driverClassName" value="${master.jdbc.driver}"/>
+	 	<property name="username" value="${master.jdbc.username}"/>
+	 	<property name="password" value="${master.jdbc.password}"></property>
+	</bean>
+	
+	<bean id="readSource1" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	 	<property name="url" value="${slave.jdbc.url}"/>
+	 	<property name="driverClassName" value="${slave.jdbc.driver}"/>
+	 	<property name="username" value="${slave.jdbc.username}"/>
+	 	<property name="password" value="${slave.jdbc.password}"></property>
+	</bean>
+	
+	<bean id="readSource2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	 	<property name="url" value="${slave.jdbc.url}"/>
+	 	<property name="driverClassName" value="${slave.jdbc.driver}"/>
+	 	<property name="username" value="${slave.jdbc.username}"/>
+	 	<property name="password" value="${slave.jdbc.password}"></property>
+	</bean>
+	
+	<!-- 配置路由datasource -->
+	<bean id="dataSource" class="harry.datasource.ReadWriteDataSource">
+		<property name="targetDataSources">
+			<map>
+				<entry key="slaveDataSource1" value-ref="readSource1"/>
+				<entry key="slaveDataSource2" value-ref="readSource2"/>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="writeSource"/>
+	</bean>
+	
+	<!-- 创建sqlsessionfactorybean -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="typeAliasesPackage" value="harry.entities"/>
+        <property name="mapperLocations" value="classpath:harry/dao/*.xml"></property>		
+	</bean>
+	
+	<!-- 配置sqlSessionTemplate -->
+	<bean id="sessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sessionFactory"/>
+		<constructor-arg index="1" value="BATCH"></constructor-arg>
+	</bean>
+	
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- 开启事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 开启包扫描 -->
+	<context:component-scan base-package="harry.dao"/>
+	<context:component-scan base-package="harry.service"/>
+	<context:component-scan base-package="harry.aops"/>
+	
+	<!-- 开启Aspect注解 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+ </beans>

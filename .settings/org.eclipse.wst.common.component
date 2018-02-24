@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="MasterAndSlaveDemo-0.0.1-SNAPSHOT">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <property name="context-root" value="MasterAndSlaveDemo-0.0.1-SNAPSHOT"/>
+        <property name="java-output-path" value="/MasterAndSlaveDemo-0.0.1-SNAPSHOT/target/classes"/>
+    </wb-module>
+</project-modules>
