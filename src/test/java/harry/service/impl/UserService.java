@@ -1,14 +1,13 @@
 package harry.service.impl;
 
+import harry.dao.IUserDao;
+import harry.entities.User;
+import harry.service.IUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import harry.annotations.SlaveDB;
-import harry.dao.IUserDao;
-import harry.entities.User;
-import harry.service.IUserService;
 
 /**
  * 

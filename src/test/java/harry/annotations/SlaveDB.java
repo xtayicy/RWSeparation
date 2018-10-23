@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Target(value={ElementType.METHOD})
 @Inherited
 public @interface SlaveDB {
-
+	
 }

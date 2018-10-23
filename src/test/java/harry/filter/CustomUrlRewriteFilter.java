@@ -10,16 +10,17 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import net.urlrewriter.RewriteFilter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tuckey.web.filters.urlrewrite.UrlRewriteFilter;
 
 /**
  * 
  * @author harry
  *
  */
-public class CustomUrlRewriteFilter extends UrlRewriteFilter {
+public class CustomUrlRewriteFilter extends RewriteFilter {
 	private Logger logger = LoggerFactory.getLogger(CustomUrlRewriteFilter.class);
 
 	@Override

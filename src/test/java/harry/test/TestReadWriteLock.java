@@ -4,6 +4,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 
+ * @author Harry
+ *
+ */
 public class TestReadWriteLock {
 	public static void main(String[] args) throws InterruptedException {
 		ReadWriteLock lock=new ReentrantReadWriteLock();
